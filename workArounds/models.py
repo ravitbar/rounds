@@ -1,34 +1,39 @@
-from django.db import models
+from django.db import models as m
 from django.utils import timezone
 from datetime import datetime
 
 
 # Create your models here.
 
-def default_time(hour):
-    now = datetime.now()
-    start = now.replace(hour=hour, minute=0, second=0, microsecond=0)
-    return start if start > now else start + timedelta(days=1)
+class Worker(m.Model):
+    worker   = m.ForeignKey('auth.User')
+    name     = m.CharField(max_length=200)
+    password = m.CharField(max_length=20)
 
-class Worker(models.Model):
-    worker = models.ForeignKey('auth.User')
-    name   = models.CharField(max_length=200)
+    # def setCalendar(currentMonth):
 
-    def setCalendar(currentMonth):
+    # def getCalendar(currentMonth):
 
-    def getCalendar(currentMonth):
+    def get_absolute_url(self):
+        return reverse('workArounds.views.calendar', args=[self.slug])
 
-class WorkDay(models.Model):
-    day    = models.DateField()
-    worker = models.ForeignKey('auth.User')
-    start  = models.DateTimeField()
-    end    = models.DateTimeField()
+    def __init__(self, name, password):
+        self.name     = name
+        self.password = password
+        self.save()
 
-class MonthlyReport(models.Model):
-    month  = models.DateField()
-    worker = models.ForeignKey('auth.User')
-    total  = models.IntField()
-    approvedDate = models.DateTimeField(blank=True, null=True)
+
+class WorkDay(m.Model):
+    day    = m.DateField()
+    worker = m.ForeignKey('auth.User')
+    start  = m.DateTimeField(blank=True, null=True)
+    end    = m.DateTimeField(blank=True, null=True)
+
+class MonthlyReport(m.Model):
+    month  = m.DateField()
+    worker = m.ForeignKey('auth.User')
+    total  = m.IntegerField()
+    approvedDate = m.DateTimeField(blank=True, null=True)
 
     def approved(self):
         self.published_date = timezone.now()
