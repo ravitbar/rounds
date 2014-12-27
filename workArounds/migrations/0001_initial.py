@@ -18,6 +18,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('month', models.DateField()),
                 ('total', models.IntegerField()),
+                ('cycle', models.DateField(null=True, blank=True)),
                 ('approvedDate', models.DateTimeField(null=True, blank=True)),
                 ('worker', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
             ],
@@ -26,24 +27,13 @@ class Migration(migrations.Migration):
             bases=(models.Model,),
         ),
         migrations.CreateModel(
-            name='WorkDay',
+            name='Workday',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('day', models.DateField()),
                 ('start', models.DateTimeField(null=True, blank=True)),
                 ('end', models.DateTimeField(null=True, blank=True)),
-                ('worker', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
-            ],
-            options={
-            },
-            bases=(models.Model,),
-        ),
-        migrations.CreateModel(
-            name='Worker',
-            fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('name', models.CharField(max_length=200)),
-                ('password', models.CharField(max_length=20)),
+                ('offDay', models.NullBooleanField()),
                 ('worker', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
             ],
             options={

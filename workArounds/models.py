@@ -1,33 +1,10 @@
 from django.db import models as m
 from django.utils import timezone
 from datetime import datetime
+import calendar
 
 
 # Create your models here.
-
-class Worker(m.Model):
-    worker   = m.ForeignKey('auth.User')
-    name     = m.CharField(max_length=200)
-    password = m.CharField(max_length=20)
-
-    # def setCalendar(currentMonth):
-
-    # def getCalendar(currentMonth):
-
-    def get_absolute_url(self):
-        return reverse('workArounds.views.calendar', args=[self.slug])
-
-    def __init__(self, name, password):
-        self.name     = name
-        self.password = password
-        self.save()
-
-
-class WorkDay(m.Model):
-    day    = m.DateField()
-    worker = m.ForeignKey('auth.User')
-    start  = m.DateTimeField(blank=True, null=True)
-    end    = m.DateTimeField(blank=True, null=True)
 
 class MonthlyReport(m.Model):
     month  = m.DateField()
@@ -35,8 +12,19 @@ class MonthlyReport(m.Model):
     total  = m.IntegerField()
     approvedDate = m.DateTimeField(blank=True, null=True)
 
-    def approved(self):
-        self.published_date = timezone.now()
-        self.save()
+    # def __unicode__(self):
+    #     return self.month
 
+class Workday(m.Model):
+    day    = m.DateField()
+    worker = m.ForeignKey('auth.User')
+    start  = m.DateTimeField(blank=True, null=True)
+    end    = m.DateTimeField(blank=True, null=True)
+
+    # def __unicode__(self):
+    #     return '%s' % (self.worker.username)
+
+    # def days_in_month(self, year, month):
+    #     range = calendar.monthrange(year,month)
+    #     return self.day >= datetime.date(year, month, range[0]) and self.day <= datetime.date(year, month, range[0])
 
